@@ -1,2 +1,143 @@
-# Modelo-de-Enlace-ASP.NET
-Creacion de una aplicacion web para mostrar el funcionamiento del modelo de enlace a datos asp.net 
+# ModeloDeEnlace
+Creación de una aplicación ASP.NET Web Application (.NET Framework 4.8) que registra profesores en una base de datos SQL Server. Mediante el uso de Entity Framework se utiliza el enfoque Code First para crear la base de datos y mostrar los registros actualizados en un control GridView de una página WebForms. El objetivo de este proyecto es mostrar el funcionamiento del Modelo de Enlace en ASP.NET (Model Binding).
+
+[![demo](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzY1MjZiOThmMmI5M2QxZjg4MWZmYzQxY2FhYzJjOWQzMDY4ZDZkOSZjdD1n/zGoPaSCT3Td4jHd362/giphy.gif "demo")](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzY1MjZiOThmMmI5M2QxZjg4MWZmYzQxY2FhYzJjOWQzMDY4ZDZkOSZjdD1n/zGoPaSCT3Td4jHd362/giphy "demo")
+
+
+
+## Tecnologias utilizadas
+- ASP.NET WebApplication (NET Frameworl 4.8)
+- C#
+- Entity Framework (code first)
+- SQL Server 2019 Express
+
+
+
+## Introduccion
+El modelo de enlace a datos en ASP.NET es una técnica que permite vincular datos de una fuente de datos (base de datos, lista, objeto) hacia un control de interfaz de usuario con la intención de realizar operaciones automáticas de lectura o escritura.
+Un control de lista enlazado a datos soporta el modelo de enlace de ASP.NET. Esto quiere decir que se puede especificar directamente en el control los métodos que llevaran a cabo las operaciones SELECT, UPDATE, INSERT y DELETE. Las propiedades del control de lista que hacen referencia a estos métodos son SelectMethod, UpdateMethod, InsertMethod y DeleteMethod.
+
+
+
+
+## Construccion
+Crear un proyecto de aplicación web *(Archivo > Nuevo > Proyecto > VC# > Web > Aplicación web vacía de ASP.NET)*. Como tenemos un proyecto vacío, vamos a añadir una página web denominada* WebForm1.aspx*; será nuestra superficie de diseño.
+
+Según esto, empezaremos por instalar EF en la aplicación y después, utilizando *Code First*, crearemos la clase de entidad *profesor* que definirá el modelo de entidades que guardaremos en una carpeta *ModeloDeDatos* que añadiremos al proyecto. Al tratarse de un proyecto, vamos también a especificar que la clase pertenece al espacio de nombres *ModeloDeDatos* definido por la carpeta:
+
+[![01](https://imgur.com/Ie2ptd5.png "01")](https://imgur.com/Ie2ptd5 "01")
+
+
+Una vez definido el modelo de entidades, creamos el contexto de objetos definido por la clase *ContextoTutorias* derivada de **DbContext** de EF y la clase *IniciarBaseDeDatos* derivada de **DropCreateDatabaseIfModelChanges** que permita iniciar la base de datos con unos datos de prueba. Finalmente, para que, inicialmente, se pueda construir la base de datos, escribiremos el controlador del evento **Load** así:
+
+[![02](https://imgur.com/O45P1Fw.png "02")](https://imgur.com/O45P1Fw "02")
+
+La propiedad **IsPostBack** de **Page** vale **true** si la página se carga como respuesta a un valor devuelto por el cliente; en caso contrario, esto es, si es la primera vez que se carga, es **false**.
+
+
+
+#### GridView
+Una vez construida la base de datos, estamos listos para recuperarlos y mostrarlos en la página web, para lo cual vamos a utilizar un **GridView**. Este control se utiliza para mostrar los valores de un origen de datos en una tabla.
+Colocamos en la página un **GridView** y lo diseñamos como se muestra a continuación:
+
+[![03](https://imgur.com/vhCWdSD.png "03")](https://imgur.com/vhCWdSD "03")
+
+Obsérvense los valores de las propiedades **SelectMethod**, **ItemType** y **DataKeyNames**.
+El primero es el nombre del método que se ejecutará para recuperar los datos que mostrará el **GridView** cuando se cargue la página, el segundo es el nombre de la clase que define el tipo de los objetos que se van a enlazar, lo cual permitirá referirse a las propiedades de esta clase en el código XHTML, y el tercero se corresponde con una matriz que contiene los nombres de los campos de clave principal, separados por comas, de los elementos mostrados en el control. Esta propiedad hay que establecerla para que funcionen las características de actualización y eliminación automática del control de servidor.
+
+
+
+
+#### Seleccionar datos
+El siguiente paso es añadir en el fichero de código subyacente el método, *ObtenerProfesores*, especificado en **SelectMethod**. Puede hacerlo de forma automática haciendo doble clic en la opción Crear nuevo método que le será mostrada cuando trata de asignar un valor a **SelectMethod**:
+
+[![04](https://imgur.com/QTWmXbo.png "04")](https://imgur.com/QTWmXbo "04")
+
+
+Observará un resultado análogo al siguiente:
+
+[![05](https://imgur.com/FgWYBNM.png "05")](https://imgur.com/FgWYBNM "05")
+
+
+
+#### Actualizar y eliminar datos
+Especificamos los nombres de los métodos que ejecutarán esas operaciones en las propiedades **UpdateMethod** y **DeleteMethod**. Y también podemos especificar la generación automática de los botones *Editar* y *Eliminar* que ejecutarán esas operaciones, estableciendo las propiedades **AutoGenerateEditButton** y **AutoGenerateDeleteButton** a **true**. Cuando el usuario haga clic en el botón *Editar*, esa fila pasará a modo de edición mostrando dos nuevos botones: *Actualizar* y *Cancelar*, que realizarán las operaciones indicadas por su nombre, y cuando haga clic en el botón *Eliminar*, esa fila será eliminada.
+
+[![06](https://imgur.com/8ok1deW.png "06")](https://imgur.com/8ok1deW "06")
+
+
+Después de estas modificaciones en el diseño del **GridView**, el código XHTML se verá así:
+
+[![07](https://imgur.com/RGoet6h.png "07")](https://imgur.com/RGoet6h "07")
+
+
+Una vez completada la edición de los métodos *ObtenerProfesores* y *ModificarProfesores*, estos se verán según se muestra a continuación. Es imprescindible que el nombre del parámetro de cada uno de los métodos (*id* por defecto) coincida con el valor de la propiedad **DataKeyNames**; por lo tanto, en nuestro caso debe llamarse *id_profesor*.
+
+[![08](https://imgur.com/qZGYJ4m.png "08")](https://imgur.com/qZGYJ4m "08")
+[![09](https://imgur.com/JZE6gyz.png "09")](https://imgur.com/JZE6gyz "09")
+
+
+Este método es invocado automáticamente cuando el usuario hace clic en el botón *Actualizar* de una fila del **GridView**, y recibe en su parámetro *id_profesor* del objeto *profesor* enlazado y mostrado por dicha fila. A continuación, obtiene ese objeto *profesor*, identificado por el parámetro *id_profesor*, del contexto de objetos, actualiza dicho objeto con los últimos datos introducidos por el usuario invocando al método **TryUpdateModel** y salva los cambios ejecutando el método **SaveChanges** del contexto de objetos.
+
+Como el objeto *objProfesor* se actualiza con los cambios introducidos invocando al método **TryUpdateModel**, este método se debe llamar desde un método especificado por la propiedad **UpdateMethod** o **InsertMethod** de un control enlazado a datos.
+
+Vemos a continuación el método *BorrarProfesores* especificado por la propiedad **DeleteMethod** del **GridView**:
+
+[![10](https://imgur.com/g9RvRU8.png "10")](https://imgur.com/g9RvRU8 "10")
+
+
+Este otro método es invocado automáticamente cuando el usuario hace clic en el botón *Eliminar* de una fila del **GridView**, y recibe en su parámetro *id_profesor* el identificador del objeto *profesor* enlazado y mostrado por dicha fila. A continuación, invoca al método **Entry** para obtener el objeto **DbEntityEntry** que hace el seguimiento de la entidad identificada por *id_profesor* para marcarla como eliminada. Los cambios, en este caso borrar las entidades marcadas como eliminadas, serán ejecutados cuando se invoque al método **SaveChanges**.
+
+
+
+#### Insertar datos (FormView)
+El control **GridView** no incluye la propiedad **InsertMethod** (que sí tienen otros controles como **FormView**, **DetailsView** o **ListView**), por lo que no permite añadir un nuevo registro utilizando el modelo de enlace. Como alternativa, en este ejemplo, vamos a utilizar un control **FormView** para esta operación.
+A diferencia del **GridView**, el control **FormView** no proporciona una manera de generar automáticamente botones de órdenes para realizar operaciones de actualización, eliminación o inserción. Por lo tanto, hay que incluir estos botones manualmente en la plantilla adecuada del **FormView** y especificar las operaciones que se desea realizar (*Cancel, Delete, Edit, Insert, New, Page* o *Update*) a través de la propiedad **CommandName** de cada uno de estos botones.
+
+Vamos a añadir a la página web un **FormView** configurado para realizar inserciones de nuevos registros, que muestre, al menos, una caja de texto para que un usuario pueda introducir el nombre para un nuevo profesor, otra para introducir el apellido y un botón que ejecute la operación de insertar.
+
+[![11](https://imgur.com/oSGVaFy.png "11")](https://imgur.com/oSGVaFy "11")
+
+
+El código XHTML que dé lugar al **FormView** requerido puede ser así:
+
+[![12](https://imgur.com/Z7Q6lf5.png "12")](https://imgur.com/Z7Q6lf5 "12")
+
+
+Observe que añadir la operación de insertar registros en la base de datos es muy similar al proceso de actualizar y borrar registros implementados en el **GridView**. Especificamos el nombre del método que ejecutará esa operación en la propiedad **InsertMethod** y añadimos el botón *Insertar* que invocará a este método, *InsertarProfesor*, a través de la operación *Insert* asociada con el **FormView** y especificada por la propiedad **CommandName** de ese botón.
+
+[![13](https://imgur.com/OYao7US.png "13")](https://imgur.com/OYao7US "13")
+[![14](https://imgur.com/gyNIRE4.png "14")](https://imgur.com/gyNIRE4 "14")
+
+
+Este método es invocado automáticamente cuando el usuario introduce los datos para el nuevo registro y hace clic en el botón *Insertar* incluido en el **Form-View**. A continuación, crea el nuevo objeto *profesor* y lo actualiza con los datos introducidos por el usuario invocando al método **TryUpdateModel**. El nuevo objeto será añadido explícitamente al contexto de objetos y los cambios serán guardados en la base de datos tras ejecutar el método **SaveChanges**.
+
+
+
+#### Estado del modelo y validación
+En el código escrito anteriormente para insertar y modificar registros, habrá observado que los cambios solo se guardan si el estado del modelo es válido:
+
+[![15](https://imgur.com/OEygG0z.png "15")](https://imgur.com/OEygG0z "15")
+
+
+**ModelState** es un objeto, administrado por ASP.NET, que indica cuál es el estado
+del modelo. Si es válido significa que los datos de la petición eran válidos y que se ha podido crear un objeto y rellenarlo con los datos actualizados; y si no es válido significa que no todos los datos de la petición eran válidos, por lo que hay que abortar la operación en curso devolviendo el control al usuario. Se trata de un objeto de tipo **ModelStateDictionary**, esto es, un diccionario de pares clave-valor, donde como clave se usa el nombre de la propiedad del
+modelo donde se origina el error, y como valor, una descripción de lo ocurrido.
+Este mecanismo es compatible con la utilización de los atributos de anotación, atributos que permiten especificar qué propiedad del modelo se desea validar y qué tipo de validación se quiere aplicar. Por ejemplo, vamos a modificar la clase de entidad *profesor* del modelo de entidades de nuestra aplicación en el sentido siguiente:
+
+[![16](https://imgur.com/fLxE4I1.png "16")](https://imgur.com/fLxE4I1 "16")
+[![17](https://imgur.com/zE5OVi3.png "17")](https://imgur.com/zE5OVi3 "17")
+
+
+Ahora, utilizando atributos de anotación, se ha especificado que las propiedades *nombre* y *apellidos* son requeridas; esto es, si el usuario no introduce el valor para alguna de ellas, la propiedad **IsValid** de **ModelState** devolverá **false**. Esto permitirá eliminar la sentencia:
+
+[![18](https://imgur.com/BoMLnGD.png "18")](https://imgur.com/BoMLnGD "18")
+
+en los métodos *ModificarProfesores* e *InsertarProfesor*. También podemos notificar al usuario del error ocurrido, información que guarda **ModelState**. Para ello basta con que añadamos a la página web un control de validación **ValidationSummary** configurado para mostrar los errores del **ModelState**, lo que se consigue estableciendo su propiedad **ShowModelStateErrors** a **true**.
+
+
+[![19](https://imgur.com/Hqyc4rw.png "19")](https://imgur.com/Hqyc4rw "19")
+
+Si ahora ejecuta la aplicación y, por ejemplo, realiza una modificación dejando el campo *apellidos* de un determinado registro en blanco, se mostrará el mensaje “El campo apellidos es obligatorio”.
+
+[![20](https://imgur.com/C7XPdDl.png "20")](https://imgur.com/C7XPdDl "20")
