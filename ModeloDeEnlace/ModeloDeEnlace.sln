@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33423.256
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModeloDeEnlace", "ModeloDeEnlace\ModeloDeEnlace.csproj", "{07D02A34-4110-48CC-90F7-6F26A0964DA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07D02A34-4110-48CC-90F7-6F26A0964DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07D02A34-4110-48CC-90F7-6F26A0964DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07D02A34-4110-48CC-90F7-6F26A0964DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07D02A34-4110-48CC-90F7-6F26A0964DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {653469F9-7729-4243-8045-2439FD88D8A2}
+	EndGlobalSection
+EndGlobal
